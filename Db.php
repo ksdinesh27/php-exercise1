@@ -24,7 +24,9 @@ class Db {
         $sql = "INSERT INTO time_log (ip_address, lcl_date_time, srvr_date_time)"
                 . "VALUES (?,?,?)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('sss', $localIP, $localTimestamp, $serverTimestamp);
+        $stmt->bindParam(1, $localIP);
+        $stmt->bindParam(2, $localTimestamp);
+        $stmt->bindParam(3, $serverTimestamp);
 
         if ($stmt->execute()) {
             echo "New record created successfully";
