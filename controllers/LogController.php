@@ -1,6 +1,7 @@
 <?php
-require_once 'PDO_Db.php';
+require_once 'MysqliDb.php';
 require_once 'display.php';
+require_once 'models/Log.php';
 
 
 /**
@@ -11,7 +12,8 @@ require_once 'display.php';
 class LogController {
     
     function __construct(){
-        $this->db = new PDO_Db();
+        $this->log = new Log(new MysqliDb());
+        
     }
     
     function insert(){
@@ -19,14 +21,13 @@ class LogController {
         $lcl_machine = $_GET['date'];
         $srvr_machine = date("d/m/Y") . " " . date("h:i:s");
         $localIP = $_SERVER['REMOTE_ADDR'];
-        $this->db->insert($localIP, $lcl_machine, $srvr_machine);
-        $this->db->close();
+        $this->log->insert($localIP, $lcl_machine, $srvr_machine);
     }
     
     function show(){
-        $logs = $this->db->select();
+        $logs = $this->log->all();
         $disp_obj = new Display();
         $disp_obj->log($logs);
-        $this->db->close();
+        $this->log->close();
     }
 }

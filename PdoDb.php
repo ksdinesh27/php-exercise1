@@ -1,6 +1,8 @@
 <?php
+require_once "DbDriver.php";
 
-class PDO_Db {
+
+class PdoDb implements DbDriver {
 
     private $serverName = "localhost";
     private $username = "root";
@@ -23,12 +25,8 @@ class PDO_Db {
     function insert($localIP, $localTimestamp, $serverTimestamp) {
         $sql = "INSERT INTO time_log (ip_address, lcl_date_time, srvr_date_time)"
                 . "VALUES (?,?,?)";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(1, $localIP);
-        $stmt->bindParam(2, $localTimestamp);
-        $stmt->bindParam(3, $serverTimestamp);
-
-        if ($stmt->execute()) {
+        $this->query($sql, [&$localIP, &$localTimestamp, &$serverTimestamp]);
+        if ($result) {
             echo "New record created successfully";
         } else {
             echo "Error: " . $sql . "<br>" . $this->conn->error;
@@ -43,6 +41,18 @@ class PDO_Db {
 
     function close() {
         $this->conn = null;
+    }
+
+    public function query(string $sql, array $arguments) {
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(1, $localIP);
+        $stmt->bindParam(2, $localTimestamp);
+        $stmt->bindParam(3, $serverTimestamp);
+        $result = $stmt->execute();
+    }
+
+    public function getError(): string {
+        
     }
 
 }
