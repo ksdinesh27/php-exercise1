@@ -1,5 +1,5 @@
 <?php
-require_once 'PDO_Db.php';
+require_once 'Db.php';
 require_once 'display.php';
 
 
@@ -11,7 +11,7 @@ require_once 'display.php';
 class LogController {
     
     function __construct(){
-        $this->db = new PDO_Db();
+        $this->db = new Db();
     }
     
     function insert(){

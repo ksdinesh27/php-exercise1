@@ -1,6 +1,6 @@
 <?php
 
-require_once 'PDO_Db.php';
+require_once 'Db.php';
 
 Class Display {
 
