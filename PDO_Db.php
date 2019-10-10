@@ -1,6 +1,6 @@
 <?php
 
-class Db {
+class PDO_Db {
 
     private $serverName = "localhost";
     private $username = "root";
