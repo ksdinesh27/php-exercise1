@@ -11,7 +11,7 @@ require_once 'display.php';
 class LogController {
     
     function __construct(){
-        $this->db = new Db();
+        $this->db = new PDO_db();
     }
     
     function insert(){
