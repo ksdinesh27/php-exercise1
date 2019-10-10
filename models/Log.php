@@ -17,7 +17,7 @@ class Log {
         $sql = "INSERT INTO time_log (ip_address, lcl_date_time, srvr_date_time)"
                 . "VALUES (?,?,?)";
         
-        $result = $this->db->query($sql, [&$localIP, &$localTimestamp, &$serverTimestamp]);
+        $result = $this->db->execute($sql, [&$localIP, &$localTimestamp, &$serverTimestamp]);
         
         if ($result) {
             echo "New record created successfully";
@@ -28,7 +28,7 @@ class Log {
     
     function all() {
         $sql = "SELECT ip_address,lcl_date_time,srvr_date_time from time_log";
-        $result = $this->db->query($sql);
+        $result = $this->db->select($sql);
         return $result;
     }
 }

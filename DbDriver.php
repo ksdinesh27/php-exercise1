@@ -6,9 +6,16 @@
  */
 interface DbDriver {
     
+    const serverName = "localhost";
+    const username = "root";
+    const password = "";
+    const dbname = "time_App";
+
     function close();
     
-    function query(string $sql, array $arguments);
+    function execute(string $sql, array $arguments);
+
+    function select(string $sql, array $arguments);
     
     function getError(): string;
     

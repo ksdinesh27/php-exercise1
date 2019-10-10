@@ -31,8 +31,7 @@ function refreshLocalTime()
 function insert_data()
 {
     var date = moment().format("DD/MM/YYYY") + " " + moment().format("hh:mm:ss");
-    var value = 'log/insert';
-    var url = "routeMap.php?date=" + uriParam(date) + "&route=" + uriParam(value);
+    var url = "log/insert?date=" + uriParam(date);
     var get = new ajax("GET", url);
     get.send();
 }
@@ -40,8 +39,7 @@ function insert_data()
 function select_data()
 {
     var date = '';
-    var value = 'log/show';
-    var url = "routeMap.php?date=" + uriParam(date) + "&route=" + uriParam(value);
+    var url = "log/show?date=" + uriParam(date);
     var get = new ajax("GET", url);
     get.onSuccess = function (responseText) {
         document.getElementById("content").innerHTML = responseText;

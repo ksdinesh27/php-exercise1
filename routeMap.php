@@ -18,9 +18,8 @@ if (count($firstTwoSegs) > 1) {
 
 
     $path = __DIR__ . '/controllers/' . $activeController . '.php';
-    require $path;
+    require_once $path;
 
     $controllerObj = new $activeController;
-    var_dump($activeController);
     $controllerObj->$activeMethod($uriArgs);
 }

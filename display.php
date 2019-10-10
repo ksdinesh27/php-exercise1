@@ -5,7 +5,7 @@ require_once 'MysqliDb.php';
 Class Display {
 
     function log($logs) {
-        if ($logs->fetchColumn() > 0) {
+        if (!empty($logs)) {
             echo "<table align='center'>
         <tr>
         <th><b>Client IP Address</b></th>
@@ -13,7 +13,7 @@ Class Display {
         <th><b>Server TimeStamp</b></th>
         </tr>";
             // output data of each row
-            while ($log = $logs->fetch(PDO::FETCH_ASSOC)) {
+            foreach ($logs as $log) {
                 echo "<tr>"
                 . "<td>" . $log["ip_address"] . "</td>"
                 . "<td>" . $log["lcl_date_time"] . "</td>"

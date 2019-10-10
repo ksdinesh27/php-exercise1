@@ -3,38 +3,27 @@ require_once "DbDriver.php";
 
 class MysqliDb implements DbDriver {
 
-    private $serverName = "localhost";
-    private $username = "root";
-    private $password = "123456";
-    private $dbname = "time_App";
+
     private $conn = null;
 
     
     public function __construct() {
-        $this->conn = new mysqli($this->serverName, $this->username, $this->password, $this->dbname);
+        $this->conn = new mysqli(self::serverName, self::username, self::password, self::dbname);
         if ($this->conn->connect_error) {
             die("Connection failed: " . $this->conn->connect_error);
         }
     }
-//    
-//    function insert() {
-//        $db = $this;
-//
-//    }
-//
-//    function select() {
-//        $db = $this;
-//        
-//
-//    }
     
     public function close()
     {
         $this->conn->close();
     }
 
-    public function query(string $sql, array $arguments = null) {
+    public function execute(string $sql, array $arguments = null) {
         $statement = $this->conn->prepare($sql);
+        if ($statement === false) {
+            die("Error: " . $sql . "<br>" . $this->getError());
+        }
         if($arguments){
             $argTypes = "";
             foreach($arguments as $arg){
@@ -43,7 +32,17 @@ class MysqliDb implements DbDriver {
             $bindArgs = array_merge([$argTypes], $arguments);
             \call_user_func_array([$statement, 'bind_param'], $bindArgs);
         }
-        return $statement->execute();
+        $ok = $statement->execute();
+        if(!$ok){
+            throw new Exception("Error: " . $sql . "\n" . $this->db->getError());
+        }
+        return $statement;
+    }
+
+    public function select(string $sql, array $arguments = null) {
+        $statement = $this->execute($sql, $arguments);
+        $result = $statement->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
     
     private function getArgType($arg) {
