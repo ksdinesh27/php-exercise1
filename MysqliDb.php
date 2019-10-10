@@ -35,7 +35,7 @@ class MysqliDb implements DbDriver {
 
     public function query(string $sql, array $arguments = null) {
         $statement = $this->conn->prepare($sql);
-        if(!$arguments){
+        if($arguments){
             $argTypes = "";
             foreach($arguments as $arg){
                 $argTypes .= $this->getArgType($arg);
