@@ -1,5 +1,5 @@
 <?php
-
+namespace Db;
 /**
  *
  * @author livares

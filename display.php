@@ -1,7 +1,5 @@
 <?php
 
-require_once 'MysqliDb.php';
-
 Class Display {
 
     function log($logs) {

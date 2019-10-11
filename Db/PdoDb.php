@@ -1,19 +1,16 @@
 <?php
-require_once "DbDriver.php";
+namespace Db;
 
+use PDO;
 
 class PdoDb implements DbDriver {
 
-    private $serverName = "localhost";
-    private $username = "root";
-    private $password = "123456";
-    private $dbname = "time_App";
     private $conn = null;
 
     public function __construct() {
 
         try {
-            $this->conn = new PDO("mysql:host=" . $this->serverName . ";dbname=" . $this->dbname, $this->username, $this->password);
+            $this->conn = new PDO("mysql:host=" . self::serverName . ";dbname=" . self::dbname, self::username, self::password);
             // set the PDO error mode to exception
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             //echo "Connected successfully";
@@ -22,37 +19,42 @@ class PdoDb implements DbDriver {
         }
     }
 
-    function insert($localIP, $localTimestamp, $serverTimestamp) {
-        $sql = "INSERT INTO time_log (ip_address, lcl_date_time, srvr_date_time)"
-                . "VALUES (?,?,?)";
-        $this->query($sql, [&$localIP, &$localTimestamp, &$serverTimestamp]);
-        if ($result) {
-            echo "New record created successfully";
-        } else {
-            echo "Error: " . $sql . "<br>" . $this->conn->error;
-        }
-    }
-
-    function select() {
-        $sql = "SELECT ip_address,lcl_date_time,srvr_date_time from time_log";
-        $result = $this->conn->query($sql);
-        return $result;
-    }
-
     function close() {
         $this->conn = null;
     }
 
-    public function query(string $sql, array $arguments) {
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(1, $localIP);
-        $stmt->bindParam(2, $localTimestamp);
-        $stmt->bindParam(3, $serverTimestamp);
-        $result = $stmt->execute();
+    public function getError(): string {
+        return $this->conn->error;
     }
 
-    public function getError(): string {
-        
+    public function execute(string $sql, array $arguments = null) {
+        $statement = $this->conn->prepare($sql);
+        if ($statement === false) {
+            die("Error: " . $sql . "<br>" . $this->getError());
+        }
+
+        if ($arguments) {
+            foreach ($arguments as $index => &$arg) {
+                $statement->bindParam($index+1, $arg);
+            }
+        }
+        $ok = $statement->execute();
+        if (!$ok) {
+            throw new Exception("Error: " . $sql . "\n" . $this->db->getError());
+        }
+        return $statement;
+    }
+
+//    function select() {
+//        $sql = "SELECT ip_address,lcl_date_time,srvr_date_time from time_log";
+//        $result = $this->conn->query($sql);
+//        return $result;
+//    }
+
+    public function select(string $sql, array $arguments = null) {
+
+        $result = $this->execute($sql);
+        return $result;
     }
 
 }
