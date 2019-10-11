@@ -4,19 +4,18 @@ require 'functions.php';
 error_reporting(E_ALL);
 ini_set('display_errors', true);
 
+$requestUri = !empty($_GET['route']) ? $_GET['route'] : ltrim($_SERVER["REQUEST_URI"], '/');
+$firstTwoSegs = getRouteSegmentsFromUri($requestUri);
 
-$firstTwoSegs = getRouteSegmentsFromUri($_GET['route']);
+$uriArgs = removeRouteSegments(explode('/', $requestUri));
 
-$uriArgs = removeRouteSegments(explode('/', $_GET['route']));
 
 
 
 if (count($firstTwoSegs) > 1) {
     $activeController = ucfirst($firstTwoSegs[0]) . 'Controller';
-
-    $activeMethod = $firstTwoSegs[1];
-
-
+    $second_seg = explode('?', $firstTwoSegs[1]);
+    $activeMethod = array_shift($second_seg);
     $path = __DIR__ . '/controllers/' . $activeController . '.php';
     require_once $path;
 
