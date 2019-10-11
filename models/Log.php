@@ -1,6 +1,5 @@
 <?php
-require_once "DbDriver.php";
-require_once 'MysqliDb.php';
+use Db\DbDriver;
 
 /**
  * Description of Log

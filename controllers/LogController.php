@@ -1,8 +1,8 @@
 <?php
-require_once 'MysqliDb.php';
 require_once 'display.php';
 require_once 'models/Log.php';
 
+use Db\PdoDb;
 
 /**
  * Description of LogController
@@ -12,9 +12,8 @@ require_once 'models/Log.php';
 class LogController {
     
     function __construct(){
-        $this->db = new MysqliDb();
+        $this->db = new PdoDb();
         $this->log = new Log($this->db);
-        
     }
     
     function insert(){
