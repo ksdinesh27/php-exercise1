@@ -1,5 +1,7 @@
 <?php
-require_once "DbDriver.php";
+namespace Db;
+
+use mysqli;
 
 class MysqliDb implements DbDriver {
 
@@ -30,7 +32,7 @@ class MysqliDb implements DbDriver {
                 $argTypes .= $this->getArgType($arg);
             }
             $bindArgs = array_merge([$argTypes], $arguments);
-            \call_user_func_array([$statement, 'bind_param'], $bindArgs);
+            call_user_func_array([$statement, 'bind_param'], $bindArgs);
         }
         $ok = $statement->execute();
         if(!$ok){
