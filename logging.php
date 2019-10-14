@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <title></title>
-        <link rel="stylesheet" href="/styles/log_style.css">
+        <link rel="stylesheet" href="styles/log_style.css">
     <div class="mainDiv"> <h1 align='center'>My Web Application</h1> </div>
 
 </head>
